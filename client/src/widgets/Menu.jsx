@@ -3,7 +3,7 @@ import React from "react";
 
 function Menu() {
   return (
-    <div className="fixed top-1/2 left-6 -translate-y-1/2 z-50 bg-base-200 shadow-xl rounded-4xl p-2 w-20" style={{ backgroundColor: "#E0E7FF" }}>
+    <div className="fixed top-1/2 left-15 -translate-y-1/2 z-50 bg-base-200 shadow-xl rounded-4xl p-2 w-20" style={{ backgroundColor: "#E0E7FF" }}>
       <ul className="menu flex flex-col space-y-3">
 
         {/* Home */}

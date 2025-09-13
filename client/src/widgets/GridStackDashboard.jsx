@@ -29,9 +29,9 @@ function GridStackDashboard() {
       <Menu />
 
       {/* Main Dashboard shifted right */}
-      <div className="flex-1 ml-24 p-8">
-        {/* 👆 ml-24 ensures space for sidebar (adjust to match Menu width) */}
-        <h1 className="text-xl font-bold mb-8">Overview</h1>
+      <div className="flex-1 ml-43 p-8">
+        {/* 👆 ml-28 ensures space for sidebar (adjust to match Menu width) */}
+        <h1 className="text-4xl font-bold mb-8">Overview</h1>
 
         <div className="grid-stack" ref={gridRef}>
           {/* Grouped Section: New Assignments */}
@@ -42,7 +42,7 @@ function GridStackDashboard() {
             data-gs-w="12"
             data-gs-auto-position="true"
           >
-            <div className="collapse bg-base-100 border border-base-300 rounded-lg p-4">
+            <div className="collapse bg-base-100 border border-base-300 rounded-lg p-4 mb-8">
               <h1 className="text-2xl font-bold mb-4">New Assignments</h1>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <WidgetCard />
