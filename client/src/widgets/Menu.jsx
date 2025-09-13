@@ -3,28 +3,19 @@ import React from "react";
 
 function Menu() {
   return (
-    <div className="fixed top-1/2 left-6 -translate-y-1/2 z-50 bg-base-200 shadow-xl rounded-4xl p-2 w-20">
+    <div className="fixed top-1/2 left-6 -translate-y-1/2 z-50 bg-base-200 shadow-xl rounded-4xl p-2 w-20" style={{ backgroundColor: "#E0E7FF" }}>
       <ul className="menu flex flex-col space-y-3">
-        
+
         {/* Home */}
         <li>
           <a className="flex items-center space-x-2 group">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
+            <img
+              src="/home.png"
+              alt="home"
               className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-              />
-            </svg>
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-sm">
-              Home
+            />
+            <span className="opacity-0 group-hover:opacity-100 transition-all duration-200 px-2 py-1 rounded-3g transform group-hover:w-32 scale-110 inline-block">
+                Home
             </span>
           </a>
         </li>
@@ -37,8 +28,8 @@ function Menu() {
               alt="applications"
               className="h-5 w-5"
             />
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-sm">
-                Applications
+            <span className="opacity-0 group-hover:opacity-100 transition-all duration-200 px-2 py-1 rounded-3g transform group-hover:w-32 scale-110 inline-block">
+                Applications  
             </span>
           </a>
         </li>
@@ -51,37 +42,25 @@ function Menu() {
               alt="broker management"
               className="h-5 w-5"
             />
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-sm">
+            <span className="opacity-0 group-hover:opacity-100 transition-all duration-200
+                 px-2 py-1 rounded-3xl inline-block 
+                 w-auto group-hover:w-36 text-black overflow-hidden whitespace-nowrap">
               Broker Management
             </span>
           </a>
         </li>
 
-
-        {/* Broker Management */}
-        <li>
-          <a className="flex items-center space-x-2 group">
-            <img
-              src="/brokermgmt.png"
-              alt="broker management"
-              className="h-5 w-5"
-            />
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-sm">
-              Broker Management
-            </span>
-          </a>
-        </li>
 
         {/* Submissions */}
         <li>
           <a className="flex items-center space-x-2 group">
             <img
-              src="/brokermgmt.png"
-              alt="broker management"
+              src="/submissions.png"
+              alt="submissions"
               className="h-5 w-5"
             />
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-sm">
-              Broker Management
+            <span className="opacity-0 group-hover:opacity-100 transition-all duration-200 px-2 py-1 rounded-3g transform group-hover:w-32 scale-110 inline-block">
+              Submissions
             </span>
           </a>
         </li>
@@ -90,12 +69,40 @@ function Menu() {
         <li>
           <a className="flex items-center space-x-2 group">
             <img
-              src="/brokermgmt.png"
-              alt="broker management"
+              src="/organization.png"
+              alt="organization"
               className="h-5 w-5"
             />
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-sm">
-              Broker Management
+            <span className="opacity-0 group-hover:opacity-100 transition-all duration-200 px-2 py-1 rounded-3g transform group-hover:w-32 scale-110 inline-block">
+              Organization
+            </span>
+          </a>
+        </li>
+
+        {/* Goals & Rules */}
+        <li>
+          <a className="flex items-center space-x-2 group">
+            <img
+              src="/goalsrules.png"
+              alt="goals and rules"
+              className="h-5 w-5"
+            />
+            <span className="opacity-0 group-hover:opacity-100 transition-all duration-200 px-2 py-1 rounded-3g transform group-hover:w-32 scale-110 inline-block">
+              Goals & Rules
+            </span>
+          </a>
+        </li>
+
+        {/* Settings */}
+        <li>
+          <a className="flex items-center space-x-2 group">
+            <img
+              src="/settings.png"
+              alt="settings"
+              className="h-5 w-5"
+            />
+            <span className="opacity-0 group-hover:opacity-100 transition-all duration-200 px-2 py-1 rounded-3g transform group-hover:w-32 scale-110 inline-block">
+              Settings
             </span>
           </a>
         </li>
