@@ -1,0 +1,28 @@
+# curl --request POST
+#--url 'https://product-federato.us.auth0.com/oauth/token'
+#--header 'Content-Type: application/json'
+#--data '{
+#	"client_id":"7IjhreW9OQLKqYw5POfVAYvbuIoMd08S",
+#	"client_secret":"tWVDHGDOKx2Gw0izNqXdLh0ISd-7oHViTZ0uzGEXRdTamiXVE5dYZuN6-yRpiZK3",
+#	"audience": "https://product.federato.ai/core-api",
+#	"grant_type": "client_credentials"
+#}'
+
+
+###
+
+# curl --request POST
+#--url 'https://product.federato.ai/integrations-api/handlers/all-pollicies?outputOnly=true'
+#--header 'Authorization: Bearer <TOKEN>'
+POST https://product.federato.ai/integrations-api/handlers/all-pollicies?outputOnly=true
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjRRdnRWRktRdno5VUtSUTd5S0p1SiJ9.eyJpc3MiOiJodHRwczovL3Byb2R1Y3QtZmVkZXJhdG8udXMuYXV0aDAuY29tLyIsInN1YiI6IjdJamhyZVc5T1FMS3FZdzVQT2ZWQVl2YnVJb01kMDhTQGNsaWVudHMiLCJhdWQiOiJodHRwczovL3Byb2R1Y3QuZmVkZXJhdG8uYWkvY29yZS1hcGkiLCJpYXQiOjE3NTc3NTIzNDEsImV4cCI6MTc1Nzc2Njc0MSwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIiwiYXpwIjoiN0lqaHJlVzlPUUxLcVl3NVBPZlZBWXZidUlvTWQwOFMiLCJwZXJtaXNzaW9ucyI6W119.UHGOol7Hvd15F4CyeuHA_UxgNaSPMlEPrZuQL4JrfYpzYig2tMEGNFiiOUm50vuSOGzwsqGMAGIPTLfSgdLbw-0Q_6yEYT6MXwXQ4A_WcRA62URUTnyEIgKDiQf0oQEY6-CUG8hOMaNVRoO9YKuzpZeFpIpB0W6nhx4mfLPkae8Onsmo8usmm3NyIE0OTGR-51nHRHw-ZGR7zuGbOahvANfKKpJcInXaaSuNyimSM11AIaWL8pEdgmj0wv3n28TgzGRIymClvgPlQnwykYv6B8-eb34Tywb2i-yDHpUojyW5Oq5VKqoz1mtxaZIV5x2YMJvmMBCbOCSGQOgslXNfuw
+
+###
+
+
+
+###
+
+
+
+
