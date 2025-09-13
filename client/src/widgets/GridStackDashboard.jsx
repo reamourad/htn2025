@@ -14,7 +14,7 @@ function GridStackDashboard() {
             // Initialize GridStack with iOS-like behavior
             GridStack.init({
                 float: true,          // Disable auto-compaction
-                cellHeight: '100px',  // Set the height of each grid row
+                cellHeight: 400,  // Set the height of each grid row
                 column: 4,           // Number of grid columns
                 disableOneColumnMode: true,
                 resizable: {
@@ -44,7 +44,7 @@ function GridStackDashboard() {
                 </div>
 
                 {/* Widget 3: A large-sized widget (8x4) */}
-                <div className="grid-stack-item" data-gs-x="6" data-gs-y="0" data-gs-w="8" data-gs-h="4">
+                <div className="grid-stack-item" data-gs-x="6" data-gs-y="0" data-gs-w="2" data-gs-h="2">
                     <div className="grid-stack-item-content">
                         <WidgetCard />  {/* 👈 Your widget component here */}
                     </div>
