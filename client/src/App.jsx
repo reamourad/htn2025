@@ -1,13 +1,14 @@
 
 import './App.css'
+import "gridstack/dist/gridstack.min.css";
 import WidgetCard from './widgets/WidgetCard';
-import ResponsiveGrid from './widgets/ResponsiveGrid.jsx';
+import GridStackDashboard from "./widgets/GridStackDashboard.jsx";
 
 function App() {
 
   return (
       <div>
-          <ResponsiveGrid />
+          <GridStackDashboard />
 
       </div>
 
