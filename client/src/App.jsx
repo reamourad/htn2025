@@ -11,8 +11,6 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<GridStackDashboard />} />
-        <Route path="/widget" element={<WidgetCard />} />
-        <Route path="/menu" element={<Menu />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>
     </Router>
