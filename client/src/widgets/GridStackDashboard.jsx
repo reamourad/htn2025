@@ -1,110 +1,67 @@
-import React, { useRef, useEffect } from "react";
-import { GridStack } from "gridstack";
-import "gridstack/dist/gridstack.min.css";
-import WidgetCard from "./WidgetCard";
-import { useLayout } from "./useLayout";
+// src/GridStackDashboard.jsx
+import React, { useRef, useEffect } from 'react';
+import { GridStack } from 'gridstack';
+import 'gridstack/dist/gridstack.min.css';
+import WidgetCard from './WidgetCard';
+import HomeScreenAccounts from './HomeScreenAccounts';
+import Menu from './Menu';
 
 function GridStackDashboard() {
-    const gridRef = useRef(null);
-    const gridInstanceRef = useRef(null);
+  const gridRef = useRef(null);
 
-    const { layout, fetchLayout, saveLayout, setLayout, addWidget } =
-        useLayout();
+  useEffect(() => {
+    if (gridRef.current) {
+      GridStack.init(
+        {
+          float: false, // widgets respect y positions
+          column: 3,
+          disableOneColumnMode: false,
+          resizable: { handles: 'all' },
+        },
+        gridRef.current
+      );
+    }
+  }, []);
 
-    // Fetch layout on mount
-    useEffect(() => {
-        fetchLayout();
-    }, [fetchLayout]);
+  return (
+    <div className="flex">
+      {/* Sidebar Menu (fixed left) */}
+      <Menu />
 
-    // Init GridStack and sync with store
-    useEffect(() => {
-        if (!layout || !gridRef.current) return;
+      {/* Main Dashboard shifted right */}
+      <div className="flex-1 ml-43 p-8">
+        {/* 👆 ml-28 ensures space for sidebar (adjust to match Menu width) */}
+        <h1 className="text-4xl font-bold mb-8">Overview</h1>
 
-        if (gridInstanceRef.current) {
-            gridInstanceRef.current.destroy(false);
-        }
-
-        const grid = GridStack.init(
-            {
-                float: true,
-                cellHeight: 100,
-                column: 12,
-                margin: 8,
-                disableOneColumnMode: true,
-                resizable: { handles: "all" },
-            },
-            gridRef.current
-        );
-
-        gridInstanceRef.current = grid;
-
-        // Sync DOM to store
-        grid.batchUpdate();
-        layout.forEach((item) => {
-            const el = gridRef.current.querySelector(
-                `[data-gs-id='${item.id}']`
-            );
-            if (el && el.gridstackNode) {
-                grid.update(el, {
-                    x: item.x,
-                    y: item.y,
-                    w: item.w,
-                    h: item.h,
-                });
-            }
-        });
-        grid.commit();
-
-        return () => {
-            grid.destroy(false);
-            gridInstanceRef.current = null;
-        };
-    }, [layout]);
-
-    // Manual Save button
-    const handleSave = () => {
-        const grid = gridInstanceRef.current;
-        if (!grid) return;
-        const current = grid.save(false);
-        // Merge store data
-        const byId = new Map(layout.map((w) => [w.id, w]));
-        const merged = current.map((item) => ({ ...byId.get(item.id), ...item }));
-        setLayout(merged);
-        saveLayout();
-    };
-
-    return (
-        <div className="p-8">
-            <h1 className="text-3xl font-bold text-center mb-4">Zustand GridStack</h1>
-
-            <div className="flex gap-2 mb-4">
-                <button onClick={handleSave} className="btn btn-primary">
-                    Save Layout
-                </button>
-                <button onClick={addWidget} className="btn btn-secondary">
-                    Add Widget
-                </button>
+        <div className="grid-stack" ref={gridRef}>
+          {/* Grouped Section: New Assignments */}
+          <div
+            className="grid-stack-item"
+            data-gs-x="0"
+            data-gs-y="0"
+            data-gs-w="12"
+            data-gs-auto-position="true"
+          >
+            <div className="collapse bg-base-100 border border-base-300 rounded-lg p-4 mb-8">
+              <h1 className="text-2xl font-bold mb-4">New Assignments</h1>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <WidgetCard />
+                <WidgetCard />
+                <WidgetCard />
+              </div>
             </div>
+          </div>
 
-            <div className="grid-stack" ref={gridRef}>
-                {layout.map((item) => (
-                    <div
-                        key={item.id}
-                        className="grid-stack-item"
-                        data-gs-id={item.id}
-                        data-gs-x={item.x}
-                        data-gs-y={item.y}
-                        data-gs-w={item.w}
-                        data-gs-h={item.h}
-                    >
-                        <div className="grid-stack-item-content">
-                            <WidgetCard title={item.title} imageUrl={item.imageUrl} />
-                        </div>
-                    </div>
-                ))}
+          {/* Second row widget (Widget 4) */}
+          <div className="grid-stack-item" data-gs-auto-position="true">
+            <div className="collapse bg-base-100 border border-base-300 rounded-lg p-4">
+              <HomeScreenAccounts />
             </div>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 export default GridStackDashboard;
