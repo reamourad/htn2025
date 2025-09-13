@@ -1,19 +1,22 @@
-
-import './App.css'
+import './App.css';
 import "gridstack/dist/gridstack.min.css";
 import WidgetCard from './widgets/WidgetCard';
 import GridStackDashboard from "./widgets/GridStackDashboard.jsx";
 import Menu from './widgets/Menu';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Settings from "./pages/Settings";
 
 function App() {
-
   return (
-      <div>
-          <GridStackDashboard />
-          <Menu />
-      </div>
-
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<GridStackDashboard />} />
+        <Route path="/widget" element={<WidgetCard />} />
+        <Route path="/menu" element={<Menu />} />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
