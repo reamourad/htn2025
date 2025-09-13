@@ -90,3 +90,4 @@ def compute_priority_scores(submissions: List[Submission]):
 def rank_submissions(payload: SubmissionList):
     ranked = compute_priority_scores(payload.data)
     return {"ranked_submissions": ranked}
+
