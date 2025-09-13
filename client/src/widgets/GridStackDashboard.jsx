@@ -31,7 +31,7 @@ function GridStackDashboard() {
       {/* Main Dashboard shifted right */}
       <div className="flex-1 ml-24 p-8">
         {/* 👆 ml-24 ensures space for sidebar (adjust to match Menu width) */}
-        <h1 className="text-2xl font-bold mb-8">Overview</h1>
+        <h1 className="text-3xl font-bold mb-8">Overview</h1>
 
         <div className="grid-stack" ref={gridRef}>
           {/* Grouped Section: New Assignments */}
