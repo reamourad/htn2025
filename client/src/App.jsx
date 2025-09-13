@@ -1,12 +1,16 @@
 
 import './App.css'
 import WidgetCard from './widgets/WidgetCard';
-
+import ResponsiveGrid from './widgets/ResponsiveGrid.jsx';
 
 function App() {
 
   return (
-<WidgetCard></WidgetCard>
+      <div>
+          <ResponsiveGrid />
+
+      </div>
+
   )
 }
 
