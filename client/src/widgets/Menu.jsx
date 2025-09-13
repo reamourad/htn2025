@@ -56,6 +56,50 @@ function Menu() {
             </span>
           </a>
         </li>
+
+
+        {/* Broker Management */}
+        <li>
+          <a className="flex items-center space-x-2 group">
+            <img
+              src="/brokermgmt.png"
+              alt="broker management"
+              className="h-5 w-5"
+            />
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-sm">
+              Broker Management
+            </span>
+          </a>
+        </li>
+
+        {/* Submissions */}
+        <li>
+          <a className="flex items-center space-x-2 group">
+            <img
+              src="/brokermgmt.png"
+              alt="broker management"
+              className="h-5 w-5"
+            />
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-sm">
+              Broker Management
+            </span>
+          </a>
+        </li>
+
+        {/* Organization */}
+        <li>
+          <a className="flex items-center space-x-2 group">
+            <img
+              src="/brokermgmt.png"
+              alt="broker management"
+              className="h-5 w-5"
+            />
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-sm">
+              Broker Management
+            </span>
+          </a>
+        </li>
+
       </ul>
     </div>
   );
