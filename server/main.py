@@ -54,6 +54,7 @@ class Settings(BaseModel):
     constructionType: dict
     lossValue: dict
 
+
 # stored_settings = {
 #   "submissionType": {
 #     "newBusiness": True,
@@ -240,16 +241,27 @@ def generate_summaries(top_submissions):
         })
     return summaries
 
-# ---- API Routes ----
-@app.post("/rank_submissions")
-def rank_submissions(payload: SubmissionList):
-    ranked = compute_priority_scores(payload.data)
+@app.get("/rank_submissions")
+def get_ranked_submissions():
+    TEST_FILE = os.path.join(os.path.dirname(__file__), "testsubmissions.json")
+
+    if not os.path.exists(TEST_FILE):
+        return {"error": f"{TEST_FILE} not found."}
+
+    with open(TEST_FILE, "r") as f:
+        data = json.load(f)
+
+    print(data)
+
+    # Convert each item to Submission model
+    submissions = [Submission(**s) for s in data.get("data", [])]
+
+    ranked = compute_priority_scores(submissions)
     top3 = ranked[:3]
     summaries = generate_summaries(top3)
-    return {
-        "ranked_submissions": ranked,
-        "top_3_summaries": summaries
-    }
+
+    return {"ranked_submissions": ranked, "top_3_summaries": summaries}
+
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 SETTINGS_FILE = os.path.join(base_dir, "settings.json")
@@ -263,6 +275,21 @@ async def save_settings(settings: Settings):
         return JSONResponse(content={"error": str(e)}, status_code=500)
 @app.get("/save_settings")
 async def get_settings():
+    if not os.path.exists(SETTINGS_FILE):
+        return JSONResponse(content=[])
+    with open(SETTINGS_FILE, "r") as f:
+        return JSONResponse(content=json.load(f))
+
+@app.post("/widget")
+async def post_widget(settings: Settings):
+    try:
+        with open(SETTINGS_FILE, "w") as f:
+            json.dump(settings.dict(), f, indent=2)
+        return JSONResponse(content={"message": "Settings saved successfully"})
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+@app.get("/widget")
+async def get_widget():
     if not os.path.exists(SETTINGS_FILE):
         return JSONResponse(content=[])
     with open(SETTINGS_FILE, "r") as f:

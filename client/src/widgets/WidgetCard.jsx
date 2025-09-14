@@ -2,7 +2,14 @@
 
 import React from 'react';
 
-function WidgetCard() {
+
+function WidgetCard({ account }) {
+  const {
+    account_name,
+    priority_score,
+    details: { appetite_score, win_score, urgency_score, profit_score },
+  } = account;
+  
     return (
       
 <div className="card bg-base-100 w-96"
@@ -17,7 +24,7 @@ function WidgetCard() {
 
   {/* Company Name */}
 <div className="text-black">
-  F1 Goal RETENTION BOUND
+  {widgetData?.account_name}
   </div>
 </div>
 {/* Radial Progress + Title Centered */}
