@@ -16,7 +16,7 @@ function Menu() {
 
       {/* Menu sidebar */}
       <div
-        className="fixed top-50 left-10 z-50 bg-[#E0E7FF] shadow-xl rounded-4xl p-2 w-20"
+        className="fixed top-40 left-10 z-50 bg-[#E0E7FF] shadow-xl rounded-4xl p-2 w-20"
       >
         <ul className="menu flex flex-col space-y-3">
 
@@ -90,7 +90,20 @@ function Menu() {
             </a>
           </li>
 
+          
+
         </ul>
+
+        {/* Profile icon at bottom-left */}
+      <div
+        className="fixed bottom-8 left-12 z-50 p-2 w-16 h-16shadow-lg flex items-center justify-center"
+      >
+        <img
+          src="/profile.png"
+          alt="Profile"
+          className="w-full h-full object-contain"
+        />
+      </div>
       </div>
     </>
   );

@@ -1,7 +1,7 @@
 // src/WidgetCard.jsx
 import React from "react";
 
-function WidgetCard() {
+function DetailWidget() {
   return (
     <a href="/details">
       <div
@@ -69,4 +69,4 @@ function WidgetCard() {
   );
 }
 
-export default WidgetCard;
+export default DetailWidget;
