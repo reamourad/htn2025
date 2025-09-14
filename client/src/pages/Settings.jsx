@@ -322,7 +322,16 @@ const Settings = () => {
 
                     <div className="flex justify-center">
                         <button type="button" onClick={updateSettings} className="btn btn-primary btn-lg">Update Settings</button>
-                    </div>
+                        <button
+                        type="button"
+                        onClick={() => {
+                            window.location.href = "/";
+                        }}
+                        className="btn btn-secondary btn-lg ml-4"
+                        >
+                        Go Home
+                        </button>                    
+                        </div>
                 </form>
 
                 {output && (

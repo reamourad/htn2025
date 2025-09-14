@@ -92,7 +92,7 @@ function Menu() {
 
           {/* Settings */}
           <li className="relative group">
-            <a className="flex items-center">
+            <a href="/settings" className="flex items-center">
               <img
                   src="/settings.png"
                   alt="settings"
