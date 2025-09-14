@@ -1,28 +1,18 @@
 import json
 import sys
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime, timezone
 import math
 from google import genai
 from google.genai import types
-from fastapi.middleware.cors import CORSMiddleware
 import os
 
 # Initialize Gemini client
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Or ["http://localhost:3000"]
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 # ---- Data Models ----
 class Submission(BaseModel):
@@ -44,119 +34,47 @@ class Submission(BaseModel):
 class SubmissionList(BaseModel):
     data: List[Submission]
 
-class Settings(BaseModel):
-    submissionType: dict
-    lineOfBusiness: dict
-    primaryRiskState: dict
-    tivLimits: dict
-    totalPremium: dict
-    buildingAge: dict
-    constructionType: dict
-    lossValue: dict
 
-# stored_settings = {
-#   "submissionType": {
-#     "newBusiness": True,
-#     "renewalBusiness": False
-#   },
-#   "lineOfBusiness": {
-#     "property": True,
-#     "other": False
-#   },
-#   "primaryRiskState": {
-#     "acceptable": ["NC", "SC", "GA", "VA", "UT"],
-#     "target": ["OH", "PA", "MD", "CO", "CA"]
-#   },
-#   "tivLimits": {
-#     "acceptableMin": 100,
-#     "acceptableMax": 150,
-#     "targetMin": 0,
-#     "targetMax": 100
-#   },
-#   "totalPremium": {
-#     "acceptableMin": 50,
-#     "acceptableMax": 175,
-#     "targetMin": 75,
-#     "targetMax": 100
-#   },
-#   "buildingAge": {
-#     "acceptableNewerThan": 1990,
-#     "targetNewerThan": 2010
-#   },
-#   "constructionType": {
-#     "acceptable": ["Masonry Non-Combustible", "Joisted Masonry", "Non-Combustible"]
-#   },
-#   "lossValue": {
-#     "lessThan": 100
-#   }
-# }
 # ---- Scoring Helper Functions ----
 def normalize(value, min_val, max_val):
     """Normalize between 0 and 1."""
     if max_val == min_val:
         return 0.0
     return (value - min_val) / (max_val - min_val)
-def get_stored_settings():
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    SETTINGS_FILE = os.path.join(base_dir, "settings.json")
-    if not os.path.exists(SETTINGS_FILE):
-        raise FileNotFoundError(f"{SETTINGS_FILE} not found.")
-    with open(SETTINGS_FILE, "r") as f:
-        settings = json.load(f)
-    # If settings.json is a list, take the first item (matches your frontend)
-    return settings
 
 def apetite_calculation(s: Submission) -> int:
-    settings = get_stored_settings()
-    score = 0  # apetite score out of 12 (or more if rules expand)
-
-    # New vs Renewal business
-    if s.renewal_or_new_business == "NEW_BUSINESS" and settings["submissionType"]["newBusiness"]:
-        score += 1
-    elif s.renewal_or_new_business == "RENEWAL" and settings["submissionType"]["renewalBusiness"]:
+    score = 0 # apetite score out of 12 for each underwriter guideline category
+    if s.renewal_or_new_business == "NEW_BUSINESS":
         score += 1
 
-    # TIV limits
-    tiv_limits = settings["tivLimits"]
-    if tiv_limits["targetMin"] <= s.tiv <= tiv_limits["targetMax"]:
+    if s.tiv <= 100000000:
         score += 2
-    elif tiv_limits["acceptableMin"] <= s.tiv <= tiv_limits["acceptableMax"]:
+    elif 100000000 < s.tiv < 150000000:
         score += 1
 
-    # Line of business
-    lob = settings["lineOfBusiness"]
-    if s.line_of_business == "COMMERCIAL_PROPERTY" and lob["property"]:
+    if s.line_of_business in ["COMMERCIAL_PROPERTY"]:
         score += 1
-    elif lob["other"]:
+    
+    if s.loss_value <= 100000:
         score += 1
-
-    # Loss value
-    if s.loss_value <= settings["lossValue"]["lessThan"]:
-        score += 1
-
-    # Total premium
-    premium_limits = settings["totalPremium"]
-    if premium_limits["targetMin"] <= s.total_premium <= premium_limits["targetMax"]:
+    
+    if 75000 <= s.total_premium >= 100000:
         score += 2
-    elif premium_limits["acceptableMin"] <= s.total_premium <= premium_limits["acceptableMax"]:
+    elif 50000 <= s.total_premium < 75000 or 100000 < s.total_premium <= 175000:
         score += 1
-
-    # Primary risk state
-    if s.primary_risk_state in settings["primaryRiskState"]["target"]:
+    
+    if s.primary_risk_state in ["OH", "PA", "MD", "CO", "CA"]:
         score += 2
-    elif s.primary_risk_state in settings["primaryRiskState"]["acceptable"]:
+    elif s.primary_risk_state in ["NC", "SC", "GA", "VA", "UT"]:
         score += 1
-
-    # Building age
-    if s.oldest_building >= settings["buildingAge"]["targetNewerThan"]:
+    
+    if s.oldest_building >= 2010:
         score += 2
-    elif s.oldest_building >= settings["buildingAge"]["acceptableNewerThan"]:
+    elif 1990 <= s.oldest_building < 2010:
         score += 1
-
-    # Construction type
-    if s.construction_type in settings["constructionType"]["acceptable"]:
+    
+    if s.construction_type in ["Masonry Non-Combustible", "Joisted Masonry", "Non-Combustible"]:
         score += 1
-
     return score
 
 def compute_priority_scores(submissions: List[Submission]):
@@ -188,10 +106,10 @@ def compute_priority_scores(submissions: List[Submission]):
 
         # Weighted score
         score = (
-            0.2 * profit_score +
-            0.5 * appetite_score +
-            0.1 * win_score +
-            0.2 * urgency_score
+            0.4 * profit_score +
+            0.3 * appetite_score +
+            0.2 * win_score +
+            0.1 * urgency_score
         )
 
         score = round(score, 2) 
@@ -250,42 +168,6 @@ def rank_submissions(payload: SubmissionList):
         "ranked_submissions": ranked,
         "top_3_summaries": summaries
     }
-
-base_dir = os.path.dirname(os.path.abspath(__file__))
-SETTINGS_FILE = os.path.join(base_dir, "settings.json")
-@app.post("/save_settings")
-async def save_settings(settings: Settings):
-    try:
-        with open(SETTINGS_FILE, "w") as f:
-            json.dump(settings.dict(), f, indent=2)
-        return JSONResponse(content={"message": "Settings saved successfully"})
-    except Exception as e:
-        return JSONResponse(content={"error": str(e)}, status_code=500)
-@app.get("/save_settings")
-async def get_settings():
-    if not os.path.exists(SETTINGS_FILE):
-        return JSONResponse(content=[])
-    with open(SETTINGS_FILE, "r") as f:
-        return JSONResponse(content=json.load(f))
-
-LAYOUT_FILE = "layout.json"
-
-@app.get("/layout")
-async def get_layout():
-    if not os.path.exists(LAYOUT_FILE):
-        return JSONResponse(content=[])
-    with open(LAYOUT_FILE, "r") as f:
-        return JSONResponse(content=json.load(f))
-
-@app.post("/layout")
-async def save_layout(request: Request):
-    try:
-        new_layout = await request.json()   # expects a list of items
-        with open(LAYOUT_FILE, "w") as f:
-            json.dump(new_layout, f, indent=2)
-        return JSONResponse(content={"message": "Layout saved successfully"})
-    except Exception as e:
-        return JSONResponse(content={"error": str(e)}, status_code=500)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
