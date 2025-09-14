@@ -16,27 +16,31 @@ function Menu() {
 
       {/* Menu sidebar */}
       <div
-        className="fixed top-40 left-10 z-50 bg-[#E0E7FF] shadow-xl rounded-4xl p-2 w-20"
+        className="fixed top-40 left-10 z-50 bg-[#DCEDFF] shadow-xl rounded-4xl p-2 w-20"
       >
         <ul className="menu flex flex-col space-y-3">
 
-          {/* Home */}
-          <li>
-            <a className="flex items-center space-x-2 group">
-              <img src="/home.png" alt="home" className="h-5 w-5" />
-              <span className="opacity-0 group-hover:opacity-100 transition-all duration-200 px-2 py-1 rounded-3xl transform group-hover:w-32 scale-110 inline-block">
-                Home
-              </span>
-            </a>
-          </li>
-
+         <li>
+        <a 
+          href="/" 
+          className="flex items-center space-x-2 group"
+        >
+          <img src="/home.png" alt="home" className="h-5 w-5" />
+          <span className="opacity-0 group-hover:opacity-100 transition-all duration-200 px-2 py-1 rounded-3xl transform group-hover:w-32 scale-110 inline-block">
+            Home
+          </span>
+        </a>
+      </li>
           {/* Applications */}
           <li>
-            <a className="flex items-center space-x-2 group">
-              <img src="/applications.png" alt="applications" className="h-5 w-5" />
-              <span className="opacity-0 group-hover:opacity-100 transition-all duration-200 px-2 py-1 rounded-3xl transform group-hover:w-32 scale-110 inline-block">
-                Applications
-              </span>
+            <a 
+          href="/details" 
+          className="flex items-center space-x-2 group"
+        >
+          <img src="/applications.png" alt="applications" className="h-5 w-5" />
+          <span className="opacity-0 group-hover:opacity-100 transition-all duration-200 px-2 py-1 rounded-3xl transform group-hover:w-32 scale-110 inline-block">
+            Applications
+          </span>
             </a>
           </li>
 
@@ -45,7 +49,7 @@ function Menu() {
             <a className="flex items-center space-x-2 group">
               <img src="/brokermgmt.png" alt="broker management" className="h-5 w-5" />
               <span className="opacity-0 group-hover:opacity-100 transition-all duration-200 px-2 py-1 rounded-3xl inline-block w-auto group-hover:w-36 text-black overflow-hidden whitespace-nowrap">
-                Broker Management
+                Broker Mgmt
               </span>
             </a>
           </li>

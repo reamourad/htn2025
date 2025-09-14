@@ -2,11 +2,14 @@
 import React, { useRef, useEffect } from 'react';
 import { GridStack } from 'gridstack';
 import 'gridstack/dist/gridstack.min.css';
-import WidgetCard from './WidgetCard';
 import HomeScreenAccounts from './HomeScreenAccounts';
 import Menu from './Menu';
+import Map from './Map';
+import DetailsWidget from './DetailWidget';
+import DetailsScreenTable from './DetailsScreenTable';
+import Status from './Status';
 
-function GridStackDashboard() {
+function DetailsTest() {
   const gridRef = useRef(null);
 
   useEffect(() => {
@@ -15,7 +18,7 @@ function GridStackDashboard() {
       GridStack.init(
           {
             float: true,          // Disable auto-compaction
-            cellHeight: '380px',  // Set the height of each grid row
+            cellHeight: '280px',  // Set the height of each grid row
             column: 1,            // Number of grid columns
             disableOneColumnMode: true,
             resizable: {
@@ -33,34 +36,33 @@ function GridStackDashboard() {
         <Menu />
 
         {/* Main Dashboard shifted right */}
-        <div className="flex-1 ml-43 p-8">
+        <div className="flex-1 ml-43 p-4">
           {/* 👆 ml-28 ensures space for sidebar (adjust to match Menu width) */}
-          <h1 className="text-4xl font-bold mb-8">Overview</h1>
+          <h1 className="text-4xl font-bold mb-8">Details</h1>
 
           <div className="grid-stack" ref={gridRef}>
-            {/* Grouped Section: New Assignments */}
             <div
                 className="grid-stack-item"
                 data-gs-x="0"
                 data-gs-y="0"
-                data-gs-w="2"   // spans all 4 columns
-                data-gs-h="3"   // one row tall (optional, defaults)
+                data-gs-w="1"   // spans all 4 columns
+                data-gs-h="1"   // one row tall (optional, defaults)
                 data-gs-auto-position="true"
             >
               <div className="overflow-x-auto">
-                <div className="flex space-x-4 min-w-max">
-                  <WidgetCard className="min-w-[300px]" />
-                  <WidgetCard className="min-w-[300px]" />
-                  <WidgetCard className="min-w-[300px]" />
-                  <WidgetCard className="min-w-[300px]" />
+                <div className="flex  min-w-max">
+                  <DetailsWidget className="min-w-[100px]" />
+                  <Map className="max-w-[10px]" />
+                  <Status className="max-w-[10px]" />   
                 </div>
               </div>
             </div>
 
-            {/* Second row widget (Widget 4) */}
+
+            {/* Third row widget (DetailsScreenTable) */}
             <div className="grid-stack-item" data-gs-auto-position="true">
-              <div className="justify-center collapse bg-base-100 border border-base-300 rounded-lg p-4 overflow-x-auto">
-                <HomeScreenAccounts />
+              <div className="justify-center collapse bg-base-100 border border-base-200 rounded-lg p-4 overflow-x-auto">
+                <DetailsScreenTable />
               </div>
             </div>
           </div>
@@ -69,4 +71,4 @@ function GridStackDashboard() {
   );
 }
 
-export default GridStackDashboard;
+export default DetailsTest;
