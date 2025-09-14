@@ -10,25 +10,25 @@ function WidgetCard() {
 ><div className="flex items-center gap-3 mb-7 mt-4 ml-4">
   {/* Company Logo */}
   <img
-    src="/Widget1company.png"
+    src="/Widget3company.png"
     alt="Company Logo"
     className="w-6 h-6 object-contain"
   />
 
   {/* Company Name */}
 <div className="text-black">
-  F1 Goal RETENTION BOUND
+  Brandon Account
   </div>
 </div>
 {/* Radial Progress + Title Centered */}
 <div className="flex flex-col items-center mb-6">
   <div
-    className="radial-progress text-green-500"
-    style={{ "--value": 85 }}
-    aria-valuenow={85}
+    className="radial-progress text-yellow-500"
+    style={{ "--value": 70 }}
+    aria-valuenow={70}
     role="progressbar"
   >
-    85%
+    70%
   </div>
 
   
@@ -42,7 +42,7 @@ function WidgetCard() {
       <h1 className="text-sm mb-2 text-red-500 font-bold">Appetite</h1>
       <progress
       className="progress progress-error w-30"
-      value="80"
+      value="10"
       max="100"
     ></progress>
   </div>
@@ -53,7 +53,7 @@ function WidgetCard() {
 
     <progress
       className="progress progress-success w-30"
-      value="90"
+      value="70"
       max="100"
     ></progress>
       </div>
