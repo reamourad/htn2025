@@ -41,7 +41,7 @@ function GridStackDashboard() {
         {
           float: true,           // widgets don’t auto-compact
           cellHeight: "330px",   // row height
-          column: 4,             // number of columns
+          column: 3,             // number of columns
           disableOneColumnMode: true,
           resizable: {
             handles: "ne",      // resize from all sides
