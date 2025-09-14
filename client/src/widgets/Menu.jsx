@@ -8,7 +8,7 @@ function Menu() {
 
           {/* Home */}
           <li className="relative group">
-            <a className="flex items-center">
+            <a href="/" className="flex items-center">
               <img
                   src="/home.png"
                   alt="home"
@@ -22,7 +22,7 @@ function Menu() {
 
           {/* Applications */}
           <li className="relative group">
-            <a className="flex items-center">
+            <a href="/details" className="flex items-center">
               <img
                   src="/applications.png"
                   alt="applications"

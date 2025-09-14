@@ -7,7 +7,7 @@ import HomeScreenAccounts from "./HomeScreenAccounts";
 import Menu from "./Menu";
 
 // Import local JSON file
-import submissionsData from "../testsubmissions.json";
+//import submissionsData from "../testsubmissions.json";
 
 function GridStackDashboard() {
   const gridRef = useRef(null);
