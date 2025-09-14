@@ -85,7 +85,7 @@ function GridStackDashboard() {
               </div>
             </div>
           ))}
-
+        
           {/* Extra static widget */}
           <div
             className="grid-stack-item"
@@ -95,7 +95,7 @@ function GridStackDashboard() {
             data-gs-h="2"
           >
             <div className="grid-stack-item-content">
-              <HomeScreenAccounts />
+              <HomeScreenAccounts/>
             </div>
           </div>
         </div>

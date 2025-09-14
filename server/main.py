@@ -11,18 +11,6 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, validator
 
-from google import genai
-from google.genai import types
-
-import debugpy
-debugpy.listen(("0.0.0.0", 5678))
-
-
-# ---- Load environment first ----
-load_dotenv()
-
-# Initialize Gemini client
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 app = FastAPI()
 
