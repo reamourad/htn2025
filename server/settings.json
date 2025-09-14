@@ -1,15 +1,25 @@
 {
   "submissionType": {
-    "newBusiness": false,
-    "renewalBusiness": true
+    "newBusiness": true,
+    "renewalBusiness": false
   },
   "lineOfBusiness": {
-    "property": false,
-    "other": true
+    "property": true,
+    "other": false
   },
   "primaryRiskState": {
-    "acceptable": [],
-    "target": []
+    "acceptable": [
+      "MD",
+      "CO",
+      "CA",
+      "FL"
+    ],
+    "target": [
+      "MD",
+      "CO",
+      "CA",
+      "FL"
+    ]
   },
   "tivLimits": {
     "acceptableMin": 0,

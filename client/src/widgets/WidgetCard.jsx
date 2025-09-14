@@ -3,6 +3,27 @@ import React from "react";
 
 
 function WidgetCard({account}) {
+
+  let radialColor = {
+    border: "border-success",     // arc color
+    bg: "bg-success/20",             // soft background
+    text: "text-green-600",         // darker number text
+  };
+
+  if (account.priority_score < 40) {
+    radialColor = {
+      border: "border-error",
+      bg: "bg-error/20",
+      text: "text-red-500",
+    };
+  } else if (account.priority_score < 70) {
+    radialColor = {
+      border: "border-warning",
+      bg: "bg-warning/20",
+      text: "text-yellow-600",
+    };
+  }
+
   return (
     <a href="/details">
       <div
@@ -27,7 +48,7 @@ function WidgetCard({account}) {
         {/* Radial Progress + Title Centered */}
         <div className="flex flex-col items-center mb-6">
           <div
-            className="radial-progress text-[#20DFA6]"
+            className={`radial-progress ${radialColor.border} ${radialColor.text} ${radialColor.bg}`}
             style={{ "--value": `${account.priority_score}` }}
             aria-valuenow={account.priority_score}
             role="progressbar"
@@ -45,8 +66,8 @@ function WidgetCard({account}) {
               <h1 className="text-sm mb-2 text-red-500 font-bold">Appetite</h1>
               <progress
                 className="progress progress-error w-32"
-                value="80"
-                max="100"
+                value={account.details.appetite_score}
+                max="1"
               ></progress>
             </div>
 
@@ -55,8 +76,8 @@ function WidgetCard({account}) {
               <h1 className="text-sm mb-2 text-[#20DFA6] font-bold">Urgency</h1>
               <progress
                 className="progress progress-success w-32"
-                value="90"
-                max="100"
+                value="0.86"
+                max="1"
               ></progress>
             </div>
           </div>

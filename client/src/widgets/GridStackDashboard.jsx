@@ -80,7 +80,7 @@ function GridStackDashboard() {
               data-gs-w="1"
               data-gs-h="1"
             >
-              <div className="grid-stack-item-content">
+              <div className="grid-stack-item-content justify-center items-center">
                 <WidgetCard account={account} />
               </div>
             </div>
@@ -95,7 +95,7 @@ function GridStackDashboard() {
             data-gs-h="2"
           >
             <div className="grid-stack-item-content">
-              <HomeScreenAccounts/>
+              <HomeScreenAccounts className="min-w-[300px]"/>
             </div>
           </div>
         </div>
