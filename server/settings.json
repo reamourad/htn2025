@@ -1,0 +1,36 @@
+{
+  "submissionType": {
+    "newBusiness": false,
+    "renewalBusiness": true
+  },
+  "lineOfBusiness": {
+    "property": false,
+    "other": true
+  },
+  "primaryRiskState": {
+    "acceptable": [],
+    "target": []
+  },
+  "tivLimits": {
+    "acceptableMin": 0,
+    "acceptableMax": 150,
+    "targetMin": 50,
+    "targetMax": 100
+  },
+  "totalPremium": {
+    "acceptableMin": 50,
+    "acceptableMax": 175,
+    "targetMin": 75,
+    "targetMax": 100
+  },
+  "buildingAge": {
+    "acceptableNewerThan": 1990,
+    "targetNewerThan": 2010
+  },
+  "constructionType": {
+    "acceptable": []
+  },
+  "lossValue": {
+    "lessThan": 100
+  }
+}
