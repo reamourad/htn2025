@@ -3,9 +3,23 @@ import React from "react";
 
 function Menu() {
   return (
+
+    
       <div className="fixed top-1/2 left-15 -translate-y-1/2 z-50 bg-base-200 shadow-xl rounded-4xl p-2 w-20" style={{ backgroundColor: "#E0E7FF" }}>
+        {/* Logo at top-left */}
+      <div
+        className="fixed top-10 left-2 z-50 p-2 w-16 h-16 bg-white rounded-full flex -mt-40"
+      >
+        <img
+          src="/white-federato-logo.png"
+          alt="Logo"
+          className="w-full h-full object-contain"
+        />
+      </div>
+        
         <ul className="menu flex flex-col space-y-3">
 
+      
           {/* Home */}
           <li className="relative group">
             <a href="/" className="flex items-center">
@@ -103,6 +117,17 @@ function Menu() {
             Settings
           </span>
           </li>
+
+          {/* Profile icon at bottom-left */}
+      <div
+      className="fixed bottom-0 left-2 z-70  w-16 h-16 bg-white rounded-full shadow-lg flex -mb-30"
+      >
+        <img
+          src="/profile.png"
+          alt="Profile"
+          className="w-full h-full object-contain"
+        />
+      </div>
 
         </ul>
       </div>
