@@ -213,6 +213,12 @@ def compute_priority_scores(submissions: List[Submission]):
     ranked.sort(key=lambda x: x["priority_score"], reverse=True)
     return ranked
 
+
+@app.get("/get_priority_scores")
+def get_priority_scores():
+    submissions = json.load(open("testsubmissions.json"))["data"]
+    return compute_priority_scores(submissions)
+
 def generate_summaries(top_submissions):
     """Generate AI summaries for the top 3 submissions."""
     summaries = []
@@ -241,26 +247,36 @@ def generate_summaries(top_submissions):
         })
     return summaries
 
-@app.get("/rank_submissions")
-def get_ranked_submissions():
-    TEST_FILE = os.path.join(os.path.dirname(__file__), "testsubmissions.json")
+# with open('../test_submissions.json', "r") as f:
+#     data = json.load(f)
 
-    if not os.path.exists(TEST_FILE):
-        return {"error": f"{TEST_FILE} not found."}
+#     # Create Pydantic model objects
+#     submissions = [Submission(**s) for s in data["data"]]
 
-    with open(TEST_FILE, "r") as f:
-        data = json.load(f)
+@app.post("/priority_scores")
+async def get_priority_scores():
+    try:
+        # Load test submissions JSON data
+        test_submissions_file = os.path.join(base_dir, "testsubmissions.json")
+        
+        if not os.path.exists(test_submissions_file):
+            return JSONResponse(content={"error": "testsubmissions.json not found."}, status_code=404)
 
-    print(data)
+        with open(test_submissions_file, "r") as f:
+            data = json.load(f)
 
-    # Convert each item to Submission model
-    submissions = [Submission(**s) for s in data.get("data", [])]
+        # Create Pydantic model objects
+        submissions = [Submission(**s) for s in data["data"]]
 
-    ranked = compute_priority_scores(submissions)
-    top3 = ranked[:3]
-    summaries = generate_summaries(top3)
+        # Compute priority scores
+        ranked = compute_priority_scores(submissions)
+        top3 = ranked[:3]
+        summaries = generate_summaries(top3)
 
-    return {"ranked_submissions": ranked, "top_3_summaries": summaries}
+        # Return ranked submissions and summaries
+        return JSONResponse(content={"ranked_submissions": ranked, "top_3_summaries": summaries})
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
 
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -311,6 +327,21 @@ async def save_layout(request: Request):
         with open(LAYOUT_FILE, "w") as f:
             json.dump(new_layout, f, indent=2)
         return JSONResponse(content={"message": "Layout saved successfully"})
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+# Add an endpoint to serve the testsubmissions.json file
+@app.get("/testsubmissions.json")
+async def serve_test_submissions():
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        test_submissions_file = os.path.join(base_dir, "..", "client", "public", "testsubmissions.json")
+        if not os.path.exists(test_submissions_file):
+            return JSONResponse(content={"error": "testsubmissions.json not found."}, status_code=404)
+
+        with open(test_submissions_file, "r") as f:
+            data = json.load(f)
+        return JSONResponse(content=data)
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
