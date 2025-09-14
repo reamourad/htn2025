@@ -1,6 +1,7 @@
 // src/WidgetCard.jsx
 import React from "react";
 
+
 function WidgetCard() {
   return (
     <a href="/details">

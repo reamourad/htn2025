@@ -16,7 +16,7 @@ export const useLayout = create((set, get) => ({
     // Load layout from backend
     fetchLayout: async () => {
         try {
-            const res = await fetch("http://127.0.0.1:5000/layout");
+            const res = await fetch("http://127.0.0.1:8000/layout");
             const data = await res.json();
 
             if (data && data.length > 0) {
