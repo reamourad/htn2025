@@ -28,11 +28,11 @@ function WidgetCard({account}) {
         <div className="flex flex-col items-center mb-6">
           <div
             className="radial-progress text-[#20DFA6]"
-            style={{ "--value": 85 }}
-            aria-valuenow={85}
+            style={{ "--value": `${account.priority_score}` }}
+            aria-valuenow={account.priority_score}
             role="progressbar"
           >
-            <b>85%</b>
+            <b>{account.priority_score}%</b>
           </div>
 
           <h2 className="card-title mt-2">Priority Score</h2>

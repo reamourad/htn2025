@@ -6,7 +6,6 @@ import WidgetCard from "./WidgetCard";
 import HomeScreenAccounts from "./HomeScreenAccounts";
 import Menu from "./Menu";
 
-
 function GridStackDashboard() {
   const gridRef = useRef(null);
 

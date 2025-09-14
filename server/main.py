@@ -55,16 +55,6 @@ class Submission(BaseModel):
     primary_risk_state: str
     renewal_or_new_business: str
 
-    # --- Validators to fix JSON issues ---
-    @validator("loss_value", pre=True)
-    def parse_loss_value(cls, v):
-        return float(v)
-
-    @validator("winnability", pre=True)
-    def normalize_winnability(cls, v):
-        v = float(v)
-        return v / 100 if v > 1 else v
-
 
 class SubmissionList(BaseModel):
     data: List[Submission]
