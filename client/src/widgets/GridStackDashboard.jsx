@@ -15,7 +15,7 @@ function GridStackDashboard() {
       GridStack.init(
           {
             float: true,          // Disable auto-compaction
-            cellHeight: '470px',  // Set the height of each grid row
+            cellHeight: '330px',  // Set the height of each grid row
             column: 1,            // Number of grid columns
             disableOneColumnMode: true,
             resizable: {
