@@ -15,15 +15,16 @@ const Settings = () => {
     const [premiumTargetMax, setPremiumTargetMax] = useState(100);
     const [buildingAgeNewer, setBuildingAgeNewer] = useState(1990);
     const [buildingAgeTarget, setBuildingAgeTarget] = useState(2010);
-    const [constructionTypeAcceptable, setConstructionTypeAcceptable] = useState(true);
-    const [constructionTypeNotAcceptable, setConstructionTypeNotAcceptable] = useState(false);
     const [lossValue, setLossValue] = useState(100);
     const [output, setOutput] = useState(null);
 
     const acceptableStates = ["OH", "PA", "MD", "CO", "CA", "FL", "NC", "SC", "GA", "VA", "UT"];
     const targetStates = ["OH", "PA", "MD", "CO", "CA", "FL"];
 
+    const acceptableConstructionTypes = ["Frame", "Joisted Masonry", "Non Combustible", "Masonry Non Combustible", "Fire Resistive"];
+
     const [selectedStates, setSelectedStates] = useState([]);
+    const [selectedConstructionTypes, setSelectedConstructionTypes] = useState([]);
 
     const handleStateClick = (state) => {
         setSelectedStates(prevSelected =>
@@ -32,7 +33,13 @@ const Settings = () => {
                 : [...prevSelected, state]
         );
     };
-
+    const handleConstructionTypeClick = (type) => {
+        setSelectedConstructionTypes(prevSelected =>
+            prevSelected.includes(type)
+                ? prevSelected.filter(t => t !== type)
+                : [...prevSelected, type]
+        );
+    };
     const updateSettings = () => {
         const settings = {
             submissionType: {
@@ -64,15 +71,25 @@ const Settings = () => {
                 targetNewerThan: parseInt(buildingAgeTarget),
             },
             constructionType: {
-                acceptable: constructionTypeAcceptable,
-                notAcceptable: constructionTypeNotAcceptable,
+                acceptable: selectedConstructionTypes,
             },
             lossValue: {
                 lessThan: parseFloat(lossValue),
             },
         };
         setOutput(settings);
-    };
+        // Send settings to backend
+        fetch("http://127.0.0.1:8000/save_settings", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(settings),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+            console.log("Backend confirmed settings:", data);
+            })
+            .catch((err) => console.error("Error sending settings:", err));
+        };
 
     return (
         <div className="bg-gray-100 flex items-center justify-center min-h-screen p-4 md:p-8">
@@ -270,27 +287,19 @@ const Settings = () => {
                     {/* Construction Type */}
                     <div className="form-control">
                         <label className="label font-bold">Construction Type</label>
-                        <div className="flex flex-col gap-2">
-                            <label className="label cursor-pointer justify-start gap-4">
-                                <input
-                                    type="checkbox"
-                                    id="constructionTypeAcceptable"
-                                    className="checkbox checkbox-primary"
-                                    checked={constructionTypeAcceptable}
-                                    onChange={(e) => setConstructionTypeAcceptable(e.target.checked)}
-                                />
-                                <span className="label-text">&gt;50% JM, Non Combustible/Steel, Masonry Non Combustible: Acceptable</span>
-                            </label>
-                            <label className="label cursor-pointer justify-start gap-4">
-                                <input
-                                    type="checkbox"
-                                    id="constructionTypeNotAcceptable"
-                                    className="checkbox checkbox-primary"
-                                    checked={constructionTypeNotAcceptable}
-                                    onChange={(e) => setConstructionTypeNotAcceptable(e.target.checked)}
-                                />
-                                <span className="label-text">&lt;50% Other: Not Acceptable</span>
-                            </label>
+                        <div className="flex flex-wrap gap-2">
+                            {acceptableConstructionTypes.map(type => {
+                                const isSelected = selectedConstructionTypes.includes(type);
+                                return (
+                                    <span
+                                        key={type}
+                                        className={`badge badge-lg cursor-pointer transition-colors ${isSelected ? 'badge-primary' : 'badge-outline'}`}
+                                        onClick={() => handleConstructionTypeClick(type)}
+                                    >
+                                        {type}
+                                    </span>
+                                );
+                            })}
                         </div>
                     </div>
 
