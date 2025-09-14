@@ -3,6 +3,8 @@ import React, { useRef, useEffect } from 'react';
 import { GridStack } from 'gridstack';
 import 'gridstack/dist/gridstack.min.css';
 import WidgetCard from './WidgetCard';
+import Widget2Card from './Widget2Card';
+import Widget3Card from './Widget3Card';
 import HomeScreenAccounts from './HomeScreenAccounts';
 import Menu from './Menu';
 
@@ -46,8 +48,8 @@ function GridStackDashboard() {
               <h1 className="text-2xl font-bold mb-4">New Assignments</h1>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <WidgetCard />
-                <WidgetCard />
-                <WidgetCard />
+                <Widget2Card />
+                <Widget3Card />
               </div>
             </div>
           </div>
