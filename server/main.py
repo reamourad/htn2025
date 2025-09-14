@@ -10,6 +10,8 @@ from google import genai
 from google.genai import types
 from fastapi.middleware.cors import CORSMiddleware
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Initialize Gemini client
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
@@ -112,50 +114,50 @@ def apetite_calculation(s: Submission) -> int:
     score = 0  # apetite score out of 12 (or more if rules expand)
 
     # New vs Renewal business
-    if s.renewal_or_new_business == "NEW_BUSINESS" and settings["submissionType"]["newBusiness"]:
+    if s["renewal_or_new_business"] == "NEW_BUSINESS" and settings["submissionType"]["newBusiness"]:
         score += 1
-    elif s.renewal_or_new_business == "RENEWAL" and settings["submissionType"]["renewalBusiness"]:
+    elif s["renewal_or_new_business"] == "RENEWAL" and settings["submissionType"]["renewalBusiness"]:
         score += 1
 
     # TIV limits
     tiv_limits = settings["tivLimits"]
-    if tiv_limits["targetMin"] <= s.tiv <= tiv_limits["targetMax"]:
+    if tiv_limits["targetMin"] <= s["tiv"] <= tiv_limits["targetMax"]:
         score += 2
-    elif tiv_limits["acceptableMin"] <= s.tiv <= tiv_limits["acceptableMax"]:
+    elif tiv_limits["acceptableMin"] <= s["tiv"] <= tiv_limits["acceptableMax"]:
         score += 1
 
     # Line of business
     lob = settings["lineOfBusiness"]
-    if s.line_of_business == "COMMERCIAL_PROPERTY" and lob["property"]:
+    if s["line_of_business"] == "COMMERCIAL_PROPERTY" and lob["property"]:
         score += 1
     elif lob["other"]:
         score += 1
 
     # Loss value
-    if s.loss_value <= settings["lossValue"]["lessThan"]:
+    if float(s["loss_value"]) <= settings["lossValue"]["lessThan"]:
         score += 1
 
     # Total premium
     premium_limits = settings["totalPremium"]
-    if premium_limits["targetMin"] <= s.total_premium <= premium_limits["targetMax"]:
+    if premium_limits["targetMin"] <= s["total_premium"] <= premium_limits["targetMax"]:
         score += 2
-    elif premium_limits["acceptableMin"] <= s.total_premium <= premium_limits["acceptableMax"]:
+    elif premium_limits["acceptableMin"] <= s["total_premium"] <= premium_limits["acceptableMax"]:
         score += 1
 
     # Primary risk state
-    if s.primary_risk_state in settings["primaryRiskState"]["target"]:
+    if s["primary_risk_state"] in settings["primaryRiskState"]["target"]:
         score += 2
-    elif s.primary_risk_state in settings["primaryRiskState"]["acceptable"]:
+    elif s["primary_risk_state"] in settings["primaryRiskState"]["acceptable"]:
         score += 1
 
     # Building age
-    if s.oldest_building >= settings["buildingAge"]["targetNewerThan"]:
+    if s["oldest_building"] >= settings["buildingAge"]["targetNewerThan"]:
         score += 2
-    elif s.oldest_building >= settings["buildingAge"]["acceptableNewerThan"]:
+    elif s["oldest_building"] >= settings["buildingAge"]["acceptableNewerThan"]:
         score += 1
 
     # Construction type
-    if s.construction_type in settings["constructionType"]["acceptable"]:
+    if s["construction_type"] in settings["constructionType"]["acceptable"]:
         score += 1
 
     return score
@@ -163,10 +165,14 @@ def apetite_calculation(s: Submission) -> int:
 def compute_priority_scores(submissions: List[Submission]):
     today = datetime.now(timezone.utc)
     
+    if not submissions:
+        print("File not found")
+        return {}
+
     # Pre-calc ranges for normalization
-    premiums = [s.total_premium for s in submissions]
-    losses = [s.loss_value for s in submissions]
-    loss_ratios = [(s.loss_value / s.total_premium) if s.total_premium > 0 else 1.0 for s in submissions]
+    premiums = [s["total_premium"] for s in submissions]
+    losses = [s["loss_value"] for s in submissions]
+    loss_ratios = [(float(s["loss_value"]) / s["total_premium"]) if s["total_premium"] > 0 else 1.0 for s in submissions]
 
     min_premium, max_premium = min(premiums), max(premiums)
     min_loss_ratio, max_loss_ratio = min(loss_ratios), max(loss_ratios)
@@ -174,14 +180,14 @@ def compute_priority_scores(submissions: List[Submission]):
     ranked = []
     for s in submissions:
         # Profitability (higher premium, lower losses better)
-        loss_ratio = s.loss_value / s.total_premium if s.total_premium > 0 else 1.0
+        loss_ratio = float(s["loss_value"]) / s["total_premium"] if s["total_premium"] > 0 else 1.0
         profit_score = 1 - normalize(loss_ratio, min_loss_ratio, max_loss_ratio)
 
         # Winnability already 0-1
-        win_score = s.winnability
+        win_score = s["winnability"]
 
         # Urgency: days until expiration (closer = higher urgency)
-        exp_date = datetime.fromisoformat(s.expiration_date.replace("Z", "+00:00"))
+        exp_date = datetime.fromisoformat(s["expiration_date"].replace("Z", "+00:00"))
         days_to_exp = (exp_date - today).days
         urgency_score = math.exp(-days_to_exp/30) if days_to_exp > 0 else 1.0  # decays over time
 
@@ -198,8 +204,8 @@ def compute_priority_scores(submissions: List[Submission]):
         score = round(score, 2) 
 
         ranked.append({
-            "id": s.id,
-            "account_name": s.account_name,
+            "id": s["id"],
+            "account_name": s["account_name"],
             "priority_score": score * 100,  
             "details": {
                 "profit_score": round(profit_score, 3),
