@@ -6,68 +6,101 @@ import WidgetCard from "./WidgetCard";
 import HomeScreenAccounts from "./HomeScreenAccounts";
 import Menu from "./Menu";
 
+<<<<<<< Updated upstream
 // Import local JSON file
 //import submissionsData from "../testsubmissions.json";
 
+=======
+>>>>>>> Stashed changes
 function GridStackDashboard() {
   const gridRef = useRef(null);
-  const [rankedAccounts, setRankedAccounts] = useState([]);
 
-  // Initialize GridStack
-  useEffect(() => {
-    if (gridRef.current) {
-      GridStack.init(
-          {
-            float: true,          // Disable auto-compaction
-            cellHeight: '330px',  // Set the height of each grid row
-            column: 1,            // Number of grid columns
-            disableOneColumnMode: true,
-            resizable: {
-              handles: 'ne',      // Disable resizing from the corners
-            },
-          },
-          gridRef.current
-      );
-    }
-  }, []);
+  const [ranked, setRanked] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch priority scores from backend using local submissions data
+  // Fetch ranked results
   useEffect(() => {
-    async function fetchPriorityScores() {
+    async function fetchResults() {
       try {
-        const response = await fetch("http://localhost:8000/priority_scores", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(submissionsData), // send the local file data
-        });
+        const response = await fetch("http://127.0.0.1:8000/results");
+        if (!response.ok) {
+          throw new Error(`Server error ${response.status}`);
+        }
 
-        const result = await response.json();
-        setRankedAccounts(result.ranked_submissions || []);
-      } catch (error) {
-        console.error("Error fetching priority scores:", error);
+        const data = await response.json();
+        setRanked(data.ranked || []); // expect array from API
+        console.log("Fetched ranked:", data.ranked);
+      } catch (err) {
+        console.error("Error fetching results:", err);
+      } finally {
+        setLoading(false);
       }
     }
-    fetchPriorityScores();
+
+    fetchResults();
   }, []);
+
+  // Initialize GridStack AFTER ranked data is available
+  useEffect(() => {
+    if (gridRef.current && ranked.length > 0) {
+      GridStack.init(
+        {
+          float: true,           // widgets don’t auto-compact
+          cellHeight: "330px",   // row height
+          column: 4,             // number of columns
+          disableOneColumnMode: true,
+          resizable: {
+            handles: "ne",      // resize from all sides
+          },
+          draggable: {
+            handle: ".grid-stack-item-content", // drag by content
+          },
+        },
+        gridRef.current
+      );
+    }
+  }, [ranked]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className="flex">
+      {/* Sidebar Menu */}
       <Menu />
+
+      {/* Main Dashboard */}
       <div className="flex-1 ml-43 p-8">
         <h1 className="text-4xl font-bold mb-8">Overview</h1>
+
         <div className="grid-stack" ref={gridRef}>
-          <div className="grid-stack-item" data-gs-auto-position="true">
-            <div className="overflow-x-auto">
-              <div className="flex space-x-4 min-w-max">
-                {rankedAccounts.map((account) => (
-                  <WidgetCard key={account.id} account={account} />
-                ))}
+          {/* Dynamic ranked accounts */}
+
+          {ranked.map((account, i) => (
+            <div
+              key={account.id ?? i}
+              className="grid-stack-item"
+              data-gs-x="0"
+              data-gs-y={i}   // 👈 place each in its own row
+              data-gs-w="1"
+              data-gs-h="1"
+            >
+              <div className="grid-stack-item-content">
+                <WidgetCard account={account} />
               </div>
             </div>
-          </div>
+          ))}
 
-          <div className="grid-stack-item" data-gs-auto-position="true">
-            <div className="collapse bg-base-100 border border-base-300 rounded-lg p-4 overflow-x-auto">
+          {/* Extra static widget */}
+          <div
+            className="grid-stack-item"
+            data-gs-x="0"
+            data-gs-y={ranked.length}
+            data-gs-w="2"
+            data-gs-h="2"
+          >
+            <div className="grid-stack-item-content">
               <HomeScreenAccounts />
             </div>
           </div>

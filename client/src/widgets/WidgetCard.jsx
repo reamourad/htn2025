@@ -2,7 +2,7 @@
 import React from "react";
 
 
-function WidgetCard() {
+function WidgetCard({account}) {
   return (
     <a href="/details">
       <div
@@ -21,7 +21,7 @@ function WidgetCard() {
           />
 
           {/* Company Name */}
-          <div className="text-black">F1 Goal RETENTION BOUND</div>
+          <div className="text-black">{account?.account_name}</div>
         </div>
 
         {/* Radial Progress + Title Centered */}
