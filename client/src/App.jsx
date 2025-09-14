@@ -5,6 +5,7 @@ import GridStackDashboard from "./widgets/GridStackDashboard.jsx";
 import Menu from './widgets/Menu';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Settings from "./pages/Settings";
+import Details from "./pages/Details";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<GridStackDashboard />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/details" element={<Details />} />
       </Routes>
     </Router>
   );
