@@ -1,77 +1,71 @@
 // src/GridStackDashboard.jsx
-import React, { useRef, useEffect, useState } from "react";
-import { GridStack } from "gridstack";
-import "gridstack/dist/gridstack.min.css";
-import WidgetCard from "./WidgetCard";
-import HomeScreenAccounts from "./HomeScreenAccounts";
-import Menu from "./Menu";
-
-// Import local JSON file
-import submissionsData from "../testsubmissions.json";
+import React, { useRef, useEffect } from 'react';
+import { GridStack } from 'gridstack';
+import 'gridstack/dist/gridstack.min.css';
+import WidgetCard from './WidgetCard';
+import HomeScreenAccounts from './HomeScreenAccounts';
+import Menu from './Menu';
 
 function GridStackDashboard() {
   const gridRef = useRef(null);
-  const [rankedAccounts, setRankedAccounts] = useState([]);
 
-  // Initialize GridStack
   useEffect(() => {
     if (gridRef.current) {
+      // Initialize GridStack with iOS-like behavior
       GridStack.init(
-        {
-          float: true,
-          cellHeight: "470px",
-          column: 1,
-          disableOneColumnMode: true,
-          resizable: { handles: "ne" },
-        },
-        gridRef.current
+          {
+            float: true,          // Disable auto-compaction
+            cellHeight: '470px',  // Set the height of each grid row
+            column: 1,            // Number of grid columns
+            disableOneColumnMode: true,
+            resizable: {
+              handles: 'ne',      // Disable resizing from the corners
+            },
+          },
+          gridRef.current
       );
     }
   }, []);
 
-  // Fetch priority scores from backend using local submissions data
-  useEffect(() => {
-    async function fetchPriorityScores() {
-      try {
-        const response = await fetch("http://localhost:8000/priority_scores", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(submissionsData), // send the local file data
-        });
-
-        const result = await response.json();
-        setRankedAccounts(result.ranked_submissions || []);
-      } catch (error) {
-        console.error("Error fetching priority scores:", error);
-      }
-    }
-    fetchPriorityScores();
-  }, []);
-
   return (
-    <div className="flex">
-      <Menu />
-      <div className="flex-1 ml-43 p-8">
-        <h1 className="text-4xl font-bold mb-8">Overview</h1>
-        <div className="grid-stack" ref={gridRef}>
-          <div className="grid-stack-item" data-gs-auto-position="true">
-            <div className="overflow-x-auto">
-              <div className="flex space-x-4 min-w-max">
-                {rankedAccounts.map((account) => (
-                  <WidgetCard key={account.id} account={account} />
-                ))}
+      <div className="flex">
+        {/* Sidebar Menu (fixed left) */}
+        <Menu />
+
+        {/* Main Dashboard shifted right */}
+        <div className="flex-1 ml-43 p-8">
+          {/* 👆 ml-28 ensures space for sidebar (adjust to match Menu width) */}
+          <h1 className="text-4xl font-bold mb-8">Overview</h1>
+
+          <div className="grid-stack" ref={gridRef}>
+            {/* Grouped Section: New Assignments */}
+            <div
+                className="grid-stack-item"
+                data-gs-x="0"
+                data-gs-y="0"
+                data-gs-w="2"   // spans all 4 columns
+                data-gs-h="3"   // one row tall (optional, defaults)
+                data-gs-auto-position="true"
+            >
+              <div className="overflow-x-auto">
+                <div className="flex space-x-4 min-w-max">
+                  <WidgetCard className="min-w-[300px]" />
+                  <WidgetCard className="min-w-[300px]" />
+                  <WidgetCard className="min-w-[300px]" />
+                  <WidgetCard className="min-w-[300px]" />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="grid-stack-item" data-gs-auto-position="true">
-            <div className="collapse bg-base-100 border border-base-300 rounded-lg p-4 overflow-x-auto">
-              <HomeScreenAccounts />
+            {/* Second row widget (Widget 4) */}
+            <div className="grid-stack-item" data-gs-auto-position="true">
+              <div className="collapse bg-base-100 border border-base-300 rounded-lg p-4 overflow-x-auto">
+                <HomeScreenAccounts />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
   );
 }
 
