@@ -6,12 +6,7 @@ import WidgetCard from "./WidgetCard";
 import HomeScreenAccounts from "./HomeScreenAccounts";
 import Menu from "./Menu";
 
-<<<<<<< Updated upstream
-// Import local JSON file
-//import submissionsData from "../testsubmissions.json";
 
-=======
->>>>>>> Stashed changes
 function GridStackDashboard() {
   const gridRef = useRef(null);
 
